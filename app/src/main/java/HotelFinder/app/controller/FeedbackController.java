@@ -1,7 +1,9 @@
-package org.example.controller;
+package HotelFinder.app.controller;
 
-import org.example.model.Feedback;
-import org.example.repository.FeedbackRepo;
+
+
+import HotelFinder.app.model.Feedback;
+import HotelFinder.app.repository.FeedbackRepo;
 
 import java.util.List;
 

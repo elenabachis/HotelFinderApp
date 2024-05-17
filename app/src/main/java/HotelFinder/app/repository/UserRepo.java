@@ -1,4 +1,4 @@
-package org.example.repository;
+package HotelFinder.app.repository;
 
 public class UserRepo
 {

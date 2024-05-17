@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rooms</title>
+    <script>
+        function calculateTotal() {
+            let checkboxes = document.querySelectorAll('input[name="roomIds"]:checked');
+            let total = 0;
+            checkboxes.forEach((checkbox) => {
+                total += parseFloat(checkbox.getAttribute('data-price'));
+            });
+            document.getElementById('totalPrice').innerText = 'Total Price: $' + total;
+        }
+    </script>
+</head>
+<body>
+<h1>Rooms</h1>
+
+<form action="/submitRooms" method="post">
+    <table>
+        <tr>
+            <th>Select</th>
+            <th>Type</th>
+            <th>Price</th>
+        </tr>
+        <tr th:each="room : ${rooms}">
+            <td><input type="checkbox" name="roomIds" th:value="${room.id}" th:data-price="${room.price}" onchange="calculateTotal()"></td>
+            <td th:text="${room.type}">Room Type</td>
+            <td th:text="${room.price}">Room Price</td>
+        </tr>
+    </table>
+    <p id="totalPrice">Total Price: $0</p>
+    <button type="submit">Submit Selected Rooms</button>
+</form>
+
+</body>
+</html>

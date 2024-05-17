@@ -1,7 +1,9 @@
-package org.example.controller;
+package HotelFinder.app.controller;
 
-import org.example.model.Reservation;
-import org.example.repository.ReservationRepo;
+
+
+import HotelFinder.app.model.Reservation;
+import HotelFinder.app.repository.ReservationRepo;
 
 import java.util.List;
 

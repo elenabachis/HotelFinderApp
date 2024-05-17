@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel List</title>
+</head>
+<body>
+<h1>Hotels in Radius</h1>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Action</th>
+    </tr>
+    <tr th:each="hotel : ${hotels}">
+        <td th:text="${hotel.id}">Hotel ID</td>
+        <td th:text="${hotel.name}">Hotel Name</td>
+        <td><a th:href="@{/selectHotel/{id}(id=${hotel.id})}">Select</a></td>
+    </tr>
+</table>
+
+</body>
+</html>

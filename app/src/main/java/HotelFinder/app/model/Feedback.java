@@ -1,4 +1,4 @@
-package org.example.model;
+package HotelFinder.app.model;
 
 public class Feedback {
     private int id;

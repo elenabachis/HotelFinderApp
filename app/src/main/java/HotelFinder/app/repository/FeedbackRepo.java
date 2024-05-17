@@ -1,7 +1,8 @@
-package org.example.repository;
+package HotelFinder.app.repository;
 
-import org.example.configuration.DbConfigurator;
-import org.example.model.Feedback;
+import HotelFinder.app.model.Feedback;
+import HotelFinder.app.configuration.DbConfigurator;
+
 
 import java.sql.*;
 import java.util.ArrayList;

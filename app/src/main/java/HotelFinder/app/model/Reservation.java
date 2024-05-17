@@ -1,4 +1,4 @@
-package org.example.model;
+package HotelFinder.app.model;
 
 import java.time.LocalDateTime;
 

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Geolocation Example</title>
+</head>
+<body>
+<h1>Geolocation Example</h1>
+
+<form id="geolocationForm" action="/submitGeolocation" method="post">
+    <input type="hidden" id="latitude" name="latitude" th:value="${latitude}" />
+    <input type="hidden" id="longitude" name="longitude" th:value="${longitude}" />
+
+    <label for="radius">Radius (kilometers):</label>
+    <input type="number" id="radius" name="radius" required />
+
+    <div id="errorMessage" style="color: red;"></div>
+
+    <button type="button" onclick="getLocationAndSubmit()">Submit Geolocation</button>
+</form>
+
+<script>
+    function getLocationAndSubmit() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                // Update the hidden input fields with the latitude and longitude values
+                document.getElementById('latitude').value = position.coords.latitude;
+                document.getElementById('longitude').value = position.coords.longitude;
+
+                // Submit the form
+                document.getElementById('geolocationForm').submit();
+            }, function(error) {
+                // Handle errors if geolocation retrieval fails
+                let errorMessage = "Unknown error";
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMessage = "User denied the request for Geolocation.";
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        errorMessage = "Location information is unavailable.";
+                        break;
+                    case error.TIMEOUT:
+                        errorMessage = "The request to get user location timed out.";
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        errorMessage = "An unknown error occurred.";
+                        break;
+                }
+                document.getElementById('errorMessage').innerText = errorMessage;
+            });
+        } else {
+            document.getElementById('errorMessage').innerText = "Geolocation is not supported by this browser.";
+        }
+    }
+</script>
+
+</body>
+</html>

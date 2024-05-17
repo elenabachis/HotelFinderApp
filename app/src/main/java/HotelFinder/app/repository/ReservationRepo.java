@@ -1,7 +1,8 @@
-package org.example.repository;
+package HotelFinder.app.repository;
 
-import org.example.configuration.DbConfigurator;
-import org.example.model.Reservation;
+import HotelFinder.app.model.Reservation;
+import HotelFinder.app.configuration.DbConfigurator;
+
 
 import java.sql.*;
 import java.util.ArrayList;
