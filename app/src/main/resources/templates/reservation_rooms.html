@@ -3,36 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <title>Rooms</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px 60px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 32px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #555;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        input[type="checkbox"] {
+            margin: 0;
+        }
+
+        p#totalPrice {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .side-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .side-buttons button {
+            width: 150px;
+        }
+    </style>
     <script>
+        var checkInDateValue = '';
+        var checkOutDateValue = '';
+
         function calculateTotal() {
-            let checkboxes = document.querySelectorAll('input[name="roomIds"]:checked');
+            let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
             let total = 0;
             checkboxes.forEach((checkbox) => {
                 total += parseFloat(checkbox.getAttribute('data-price'));
             });
-            document.getElementById('totalPrice').innerText = 'Total Price: $' + total;
+            document.getElementById('totalPrice').innerText = 'Total Price: $' + total.toFixed(2);
+        }
+
+        function validateForm() {
+            let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            if (checkboxes.length === 0) {
+                alert("Please select at least one room.");
+                return false;
+            }
+            return true;
+        }
+
+        function submitForm() {
+            if (!validateForm()) {
+                return false;
+            }
+
+            let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            let selectedIds = Array.from(checkboxes).map((checkbox) => checkbox.value);
+            document.getElementById('selectedRoomIds').value = selectedIds.join(',');
+
+            document.getElementById('checkInDateInput').value = checkInDateValue;
+            document.getElementById('checkOutDateInput').value = checkOutDateValue;
+
+            return true;
+        }
+
+        window.onload = function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            checkInDateValue = urlParams.get('checkInDate');
+            checkOutDateValue = urlParams.get('checkOutDate');
+
+            document.getElementById('checkInDate').innerText = 'Check-In Date: ' + checkInDateValue;
+            document.getElementById('checkOutDate').innerText = 'Check-Out Date: ' + checkOutDateValue;
         }
     </script>
 </head>
 <body>
-<h1>Rooms</h1>
+<div class="side-buttons">
+    <button onclick="window.location.href='/geolocation'">Geolocation</button>
+    <button onclick="window.location.href='/reservations'">Reservations</button>
+</div>
 
-<form action="/submitRooms" method="post">
-    <table>
-        <tr>
-            <th>Select</th>
-            <th>Type</th>
-            <th>Price</th>
-        </tr>
-        <tr th:each="room : ${rooms}">
-            <td><input type="checkbox" name="roomIds" th:value="${room.id}" th:data-price="${room.price}" onchange="calculateTotal()"></td>
-            <td th:text="${room.type}">Room Type</td>
-            <td th:text="${room.price}">Room Price</td>
-        </tr>
-    </table>
-    <p id="totalPrice">Total Price: $0</p>
-    <button type="submit">Submit Selected Rooms</button>
-</form>
+<div class="container">
+    <h1>Rooms</h1>
+    <div id="checkInDate" style="margin-bottom: 10px;"></div>
+    <div id="checkOutDate" style="margin-bottom: 20px;"></div>
 
+    <form action="/submitRooms" method="post" onsubmit="return submitForm()">
+        <table>
+            <tr>
+                <th>Select</th>
+                <th>Type</th>
+                <th>Price</th>
+            </tr>
+            <tr th:each="room : ${rooms}">
+                <td><input type="checkbox" th:value="${room.id}" th:data-price="${room.price}" onchange="calculateTotal()"></td>
+                <td th:text="${room.type}">Room Type</td>
+                <td th:text="${room.price}">Room Price</td>
+            </tr>
+        </table>
+        <p id="totalPrice">Total Price: $0.00</p>
+        <input type="hidden" id="selectedRoomIds" name="selectedRoomIds">
+        <input type="hidden" id="checkInDateInput" name="checkInDate">
+        <input type="hidden" id="checkOutDateInput" name="checkOutDate">
+
+        <button type="submit">Submit Selected Rooms</button>
+    </form>
+</div>
 </body>
 </html>

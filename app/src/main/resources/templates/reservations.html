@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservations</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px 60px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 32px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #555;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nested-table {
+            margin-top: 10px;
+            margin-left: 20px;
+            width: auto;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .nested-table th, .nested-table td {
+            padding: 8px;
+        }
+
+        .nested-table th {
+            background-color: #e9ecef;
+        }
+
+        .form-inline {
+            display: inline;
+        }
+
+        .total-price {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .reservation-section {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 20px;
+        }
+
+        .nav-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav-buttons">
+        <button onclick="window.location.href='/geolocation'">Geolocation</button>
+        <button onclick="window.location.href='/reservations'">Reservations</button>
+    </div>
+    <h1>Your Reservations</h1>
+
+    <div th:each="reservation : ${reservations}" class="reservation-section">
+        <table>
+            <tr>
+                <th>Reservation ID</th>
+                <th>Check-In</th>
+                <th>Check-Out</th>
+                <th>Action</th>
+                <th>Total Price</th>
+            </tr>
+            <tr>
+                <td th:text="${reservation.id}">Reservation ID</td>
+                <td>
+                    <span th:text="${#temporals.format(reservation.checkIn, 'yyyy-MM-dd HH:mm')}"></span>
+                </td>
+                <td>
+                    <span th:text="${#temporals.format(reservation.checkOut, 'yyyy-MM-dd HH:mm')}"></span>
+                </td>
+                <td>
+                    <div class="actions">
+                        <div th:if="${reservation.checkIn.minusHours(2).isAfter(#temporals.createNow())}">
+                            <form action="/modifyReservation" method="get" class="form-inline">
+                                <input type="hidden" name="reservationId" th:value="${reservation.id}">
+                                <input type="hidden" name="reservationRowId" th:value="${reservation.rows[0].id}">
+                                <button type="submit">Modify</button>
+                            </form>
+                            <form action="/deleteReservation" method="post" class="form-inline">
+                                <input type="hidden" name="reservationId" th:value="${reservation.id}">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </td>
+                <td class="total-price">
+                    <span th:text="'$' + ${reservation.totalPrice}"></span>
+                </td>
+            </tr>
+        </table>
+        <table class="nested-table">
+            <tr>
+                <th>Room ID</th>
+            </tr>
+            <tr th:each="row : ${reservation.rows}">
+                <td th:text="${row.room_id}">Room ID</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

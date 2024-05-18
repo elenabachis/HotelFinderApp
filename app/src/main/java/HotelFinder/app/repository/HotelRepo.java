@@ -10,11 +10,11 @@ import java.util.List;
 
 public class HotelRepo {
 
-    private static final String INSERT_HOTEL_SQL = "INSERT INTO Hotel (id, name, latitude, longitude) VALUES (?, ?, ?, ?)";
-    private static final String SELECT_HOTEL_BY_ID_SQL = "SELECT * FROM Hotel WHERE id = ?";
-    private static final String SELECT_ALL_HOTELS_SQL = "SELECT * FROM Hotel";
-    private static final String UPDATE_HOTEL_SQL = "UPDATE Hotel SET name = ?, latitude = ?, longitude = ? WHERE id = ?";
-    private static final String DELETE_HOTEL_SQL = "DELETE FROM Hotel WHERE id = ?";
+    private static final String INSERT_HOTEL_SQL = "INSERT INTO Hotels (id, name, latitude, longitude) VALUES (?, ?, ?, ?)";
+    private static final String SELECT_HOTEL_BY_ID_SQL = "SELECT * FROM Hotels WHERE id = ?";
+    private static final String SELECT_ALL_HOTELS_SQL = "SELECT * FROM Hotels";
+    private static final String UPDATE_HOTEL_SQL = "UPDATE Hotels SET name = ?, latitude = ?, longitude = ? WHERE id = ?";
+    private static final String DELETE_HOTEL_SQL = "DELETE FROM Hotels WHERE id = ?";
 
     public void createHotel(Hotel hotel) {
         try (Connection connection = DriverManager.getConnection(DbConfigurator.URL, DbConfigurator.USERNAME, DbConfigurator.PASSWORD);

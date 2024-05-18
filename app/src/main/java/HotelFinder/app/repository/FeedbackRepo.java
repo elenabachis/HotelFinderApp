@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FeedbackRepo {
-    // SQL queries
+
     private static final String INSERT_FEEDBACK_SQL = "INSERT INTO feedback (id, reservation_id, services_rating, cleanliness_rating, comments) VALUES (?, ?, ?, ?, ?)";
     private static final String SELECT_FEEDBACK_BY_USER_HOTEL_SQL = "SELECT * FROM feedback WHERE id = ? AND reservation_id = ?";
     private static final String SELECT_ALL_FEEDBACKS_SQL = "SELECT * FROM feedback";

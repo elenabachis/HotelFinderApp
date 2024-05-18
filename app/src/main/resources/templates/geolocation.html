@@ -3,21 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <title>Geolocation Example</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label, input {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        input[type="number"] {
+            padding: 5px;
+            font-size: 16px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #errorMessage {
+            margin-top: 10px;
+            color: red;
+        }
+
+        .side-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .side-buttons button {
+            padding: 8px 15px;
+            font-size: 14px;
+            width: 150px;
+        }
+    </style>
 </head>
 <body>
-<h1>Geolocation Example</h1>
+<div class="side-buttons">
+    <button onclick="window.location.href='/geolocation'">Geolocation</button>
+    <button onclick="window.location.href='/reservations'">Reservations</button>
+</div>
 
-<form id="geolocationForm" action="/submitGeolocation" method="post">
-    <input type="hidden" id="latitude" name="latitude" th:value="${latitude}" />
-    <input type="hidden" id="longitude" name="longitude" th:value="${longitude}" />
+<div class="container">
+    <h1>Geolocation Example</h1>
 
-    <label for="radius">Radius (kilometers):</label>
-    <input type="number" id="radius" name="radius" required />
+    <form id="geolocationForm" action="/submitGeolocation" method="post">
+        <input type="hidden" id="latitude" name="latitude" th:value="${latitude}" />
+        <input type="hidden" id="longitude" name="longitude" th:value="${longitude}" />
 
-    <div id="errorMessage" style="color: red;"></div>
+        <label for="radius">Radius (kilometers):</label>
+        <input type="number" id="radius" name="radius" step="0.01" required />
 
-    <button type="button" onclick="getLocationAndSubmit()">Submit Geolocation</button>
-</form>
+        <div id="errorMessage"></div>
+
+        <button type="button" onclick="getLocationAndSubmit()">Submit Geolocation</button>
+    </form>
+</div>
 
 <script>
     function getLocationAndSubmit() {

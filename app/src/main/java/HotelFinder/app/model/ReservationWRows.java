@@ -1,21 +1,28 @@
 package HotelFinder.app.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
-public class Reservation {
+@Setter
+public class ReservationWRows {
     private int id;
     private int userId;
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
+    private List<ReservationRow> rows;
+    private int totalPrice;
 
-    public Reservation(int id, int userId, LocalDateTime checkIn, LocalDateTime checkOut) {
+    public ReservationWRows(int id, int userId, LocalDateTime checkIn, LocalDateTime checkOut, List<ReservationRow> rows, int totalPrice) {
         this.id = id;
         this.userId = userId;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
+        this.rows = rows;
+        this.totalPrice = totalPrice;
     }
 
     public void setId(int id) {
@@ -35,6 +42,10 @@ public class Reservation {
         this.checkOut = checkOut;
     }
 
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +
@@ -45,3 +56,5 @@ public class Reservation {
                 '}';
     }
 }
+
+

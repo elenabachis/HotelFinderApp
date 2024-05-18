@@ -1,7 +1,6 @@
 package HotelFinder.app.controller;
 
 
-
 import HotelFinder.app.model.Feedback;
 import HotelFinder.app.repository.FeedbackRepo;
 

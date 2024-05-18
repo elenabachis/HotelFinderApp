@@ -1,7 +1,6 @@
 package HotelFinder.app.controller;
 
 
-
 import HotelFinder.app.model.Reservation;
 import HotelFinder.app.repository.ReservationRepo;
 
