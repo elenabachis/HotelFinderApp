@@ -16,7 +16,7 @@ public class DataInitializer {
 
         try (Connection connection = DriverManager.getConnection(DbConfigurator.URL, DbConfigurator.USERNAME, DbConfigurator.PASSWORD)) {
 
-            BufferedReader reader = new BufferedReader(new FileReader("C://Users//elena//IdeaProjects//HotelApp//src//main//java//hotels.json"));
+            BufferedReader reader = new BufferedReader(new FileReader("C://Users//elena//Downloads//app new//app//src//main//java//HotelFinder//app//hotels.json"));
             StringBuilder jsonString = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -29,7 +29,7 @@ public class DataInitializer {
 
 
             String hotelSQL = "INSERT INTO hotels (id, name, latitude, longitude) VALUES (?, ?, ?, ?)";
-            String roomSQL = "INSERT INTO rooms (roomNumber, hotel_id, type, price, isAvailable) VALUES (?, ?, ?, ?, ?)";
+            String roomSQL = "INSERT INTO rooms (roomNumber, hotel_id, type, price) VALUES (?, ?, ?, ?)";
 
             PreparedStatement hotelStmt = connection.prepareStatement(hotelSQL);
             PreparedStatement roomStmt = connection.prepareStatement(roomSQL);
@@ -55,13 +55,11 @@ public class DataInitializer {
                     int roomNumber = room.getInt("roomNumber");
                     int type = room.getInt("type");
                     int price = room.getInt("price");
-                    boolean isAvailable = room.getBoolean("isAvailable");
 
                     roomStmt.setInt(1, roomNumber);
                     roomStmt.setInt(2, hotelId);
                     roomStmt.setInt(3, type);
                     roomStmt.setInt(4, price);
-                    roomStmt.setBoolean(5, isAvailable);
                     roomStmt.executeUpdate();
                 }
             }
