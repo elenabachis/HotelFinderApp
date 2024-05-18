@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        .rating-section {
+            margin-bottom: 20px;
+        }
+
+        .rating-section h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .rating-buttons {
+            display: flex;
+            justify-content: center;
+        }
+
+        .rating-buttons button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin: 0 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .rating-buttons button:hover {
+            background-color: #0056b3;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: vertical;
+        }
+
+        button[type="submit"] {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Feedback Form</h2>
+
+    <form th:action="@{/submitFeedback}" method="post">
+        <div class="rating-section">
+            <h3>Cleanliness Rating:</h3>
+            <div class="rating-buttons">
+                <button type="button" th:each="rating : ${#numbers.sequence(1, 10)}" th:text="${rating}" th:value="${rating}" onclick="selectRating(this.value, 'cleanliness')"></button>
+            </div>
+        </div>
+
+        <div class="rating-section">
+            <h3>Service Rating:</h3>
+            <div class="rating-buttons">
+                <button type="button" th:each="rating : ${#numbers.sequence(1, 10)}" th:text="${rating}" th:value="${rating}" onclick="selectRating(this.value, 'service')"></button>
+            </div>
+
+        </div>
+
+        <div>
+            <h3>Additional Feedback:</h3>
+            <textarea name="additionalFeedback" rows="4" cols="50"></textarea>
+        </div>
+
+        <button type="submit">Submit Feedback</button>
+        <input type="hidden" id="cleanlinessRating" name="cleanlinessRating" />
+        <input type="hidden" id="serviceRating" name="serviceRating" />
+        <input type="hidden" id="reservationId" name="reservationId" th:value="${reservationId}" />
+    </form>
+</div>
+
+<script>
+    function selectRating(rating, type) {
+        if (type === 'cleanliness') {
+            document.getElementById("cleanlinessRating").value = rating;
+        } else if (type === 'service') {
+            document.getElementById("serviceRating").value = rating;
+        }
+    }
+</script>
+</body>
+</html>

@@ -111,6 +111,49 @@
             display: flex;
             gap: 10px;
         }
+
+        .feedback-btn {
+            background-color: #28a745;
+        }
+
+        .feedback-btn:hover {
+            background-color: #218838;
+        }
+
+        .feedback-text {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .feedback-text {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .feedback-content {
+            margin-top: 10px;
+        }
+
+        .feedback-rating {
+            margin-bottom: 10px;
+        }
+
+        .feedback-rating p {
+            margin: 0;
+        }
+
+        .feedback-rating span {
+            font-weight: bold;
+        }
+
+        .feedback-comments p {
+            margin: 0;
+            word-wrap: break-word; /* Wrap long words onto the next line */
+        }
+
     </style>
 </head>
 <body>
@@ -140,6 +183,23 @@
                 </td>
                 <td>
                     <div class="actions">
+                        <div th:if="${reservation.checkOut.isBefore(#temporals.createNow())}">
+                            <div th:if="${reservation.feedback == null}">
+                                <button class="feedback-btn" th:onclick="'redirectToFeedbackPage(' + ${reservation.id} + ')'" >Leave Feedback</button>
+                            </div>
+                            <div th:if="${reservation.feedback != null}" class="feedback-text">
+                                <h3>Feedback:</h3>
+                                <div class="feedback-content">
+                                    <div class="feedback-rating">
+                                        <p>Cleanliness Rating: <span th:text="${reservation.feedback.cleanlinessRating}"></span></p>
+                                        <p>Services Rating: <span th:text="${reservation.feedback.servicesRating}"></span></p>
+                                    </div>
+                                    <p th:text="${#strings.length(reservation.feedback.comments) > 30 ? #strings.substring(reservation.feedback.comments, 0, 30) + '...' : reservation.feedback.comments}"></p>
+                                </div>
+                            </div>
+
+                        </div>
+                        </div>
                         <div th:if="${reservation.checkIn.minusHours(2).isAfter(#temporals.createNow())}">
                             <form action="/modifyReservation" method="get" class="form-inline">
                                 <input type="hidden" name="reservationId" th:value="${reservation.id}">
@@ -151,7 +211,6 @@
                                 <button type="submit">Delete</button>
                             </form>
                         </div>
-                    </div>
                 </td>
                 <td class="total-price">
                     <span th:text="'$' + ${reservation.totalPrice}"></span>
@@ -168,5 +227,11 @@
         </table>
     </div>
 </div>
+<script>
+    function redirectToFeedbackPage(reservationId) {
+        window.location.href = "/leavefeedback?reservationId=" + reservationId;
+    }
+</script>
+
 </body>
 </html>

@@ -97,4 +97,30 @@ public class FeedbackRepo {
             e.printStackTrace();
         }
     }
+
+
+    private static final String GET_FEEDBACK_BY_RESERVATION_ID_SQL = "SELECT * FROM feedback WHERE reservation_id = ?";
+
+    public Feedback getFeedbackByReservationId(int id) {
+        Feedback feedback = null;
+        try (Connection connection = DriverManager.getConnection(DbConfigurator.URL, DbConfigurator.USERNAME, DbConfigurator.PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_FEEDBACK_BY_RESERVATION_ID_SQL)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    feedback = new Feedback(
+                            resultSet.getInt("id"),
+                            resultSet.getInt("reservation_id"),
+                            resultSet.getInt("services_rating"),
+                            resultSet.getInt("cleanliness_rating"),
+                            resultSet.getString("comments")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return feedback;
+    }
+
 }

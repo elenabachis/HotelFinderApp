@@ -15,14 +15,16 @@ public class ReservationWRows {
     private LocalDateTime checkOut;
     private List<ReservationRow> rows;
     private int totalPrice;
+    private Feedback feedback;
 
-    public ReservationWRows(int id, int userId, LocalDateTime checkIn, LocalDateTime checkOut, List<ReservationRow> rows, int totalPrice) {
+    public ReservationWRows(int id, int userId, LocalDateTime checkIn, LocalDateTime checkOut, List<ReservationRow> rows, int totalPrice, Feedback feedback) {
         this.id = id;
         this.userId = userId;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.rows = rows;
         this.totalPrice = totalPrice;
+        this.feedback = feedback;
     }
 
     public void setId(int id) {
@@ -44,6 +46,10 @@ public class ReservationWRows {
 
     public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public void setFeedback(Feedback feedback) {
+        this.feedback = feedback;
     }
 
     @Override

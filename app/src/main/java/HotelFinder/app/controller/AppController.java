@@ -1,6 +1,7 @@
 package HotelFinder.app.controller;
 
 import HotelFinder.app.model.*;
+import HotelFinder.app.repository.FeedbackRepo;
 import HotelFinder.app.repository.HotelRepo;
 import HotelFinder.app.repository.ReservationRepo;
 import HotelFinder.app.repository.RoomRepo;
@@ -109,15 +110,17 @@ public class AppController {
     public String showReservations(Model model) {
         ReservationRepo reservationRepo = new ReservationRepo();
         RoomRepo roomRepo = new RoomRepo();
+        FeedbackRepo feedbackRepo = new FeedbackRepo();
         List<Reservation> reservations = reservationRepo.getAllReservations();
         List<ReservationWRows> final_reservation = new ArrayList<>();
         for (Reservation reservation : reservations) {
             List<ReservationRow> rows = reservationRepo.getAllReservationsRowRID(reservation.getId());
             int price = 0;
+            Feedback feedback = feedbackRepo.getFeedbackByReservationId(reservation.getId());
             for (ReservationRow reservationRow : rows) {
                 price += (int) roomRepo.getRoomById(reservationRow.getRoom_id()).getPrice();
             }
-            ReservationWRows reservationWRows = new ReservationWRows(reservation.getId(), reservation.getUserId(), reservation.getCheckIn(), reservation.getCheckOut(), rows, price);
+            ReservationWRows reservationWRows = new ReservationWRows(reservation.getId(), reservation.getUserId(), reservation.getCheckIn(), reservation.getCheckOut(), rows, price,feedback);
             final_reservation.add(reservationWRows);
         }
         model.addAttribute("reservations", final_reservation);
@@ -151,6 +154,25 @@ public class AppController {
         ReservationRepo reservationRepo = new ReservationRepo();
         reservationRepo.deleteReservationRows(reservationId);
         reservationRepo.deleteReservation(reservationId);
+        return "redirect:/reservations";
+    }
+
+
+    @GetMapping("/leavefeedback")
+    public String showFeedbackForm(@RequestParam("reservationId") int reservationId, Model model) {
+        model.addAttribute("reservationId", reservationId);
+        return "feedback_page";
+    }
+
+    @PostMapping("/submitFeedback")
+    public String submitFeedback(@RequestParam("reservationId") int reservationId,
+                                 @RequestParam("cleanlinessRating") int cleanlinessRating,
+                                 @RequestParam("serviceRating") int serviceRating,
+                                 @RequestParam("additionalFeedback") String additionalFeedback) {
+
+        FeedbackRepo feedbackRepo = new FeedbackRepo();
+        feedbackRepo.createFeedback(new Feedback(0,reservationId,serviceRating,cleanlinessRating,additionalFeedback));
+
         return "redirect:/reservations";
     }
 
